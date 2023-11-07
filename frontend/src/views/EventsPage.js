@@ -42,7 +42,7 @@ function EventsPage() {
         {dummy_events.map((event) => {
             return (
               <li key={event.id}>
-                <NavLink className="test" to={`${event.id}`}>{event.title}</NavLink>
+                <NavLink className="test" to={event.id}>{event.title}</NavLink>
               </li>
             );
           })

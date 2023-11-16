@@ -15,7 +15,13 @@ export async function loader() {
   const response = await fetch('http://localhost:8080/events');
 
   if (!response.ok) {
-    throw new Error('Something went wrong!');
+    // throw new Error('Something went wrong!');
+    throw new Response(JSON.stringify({ message: 'Something went wrong!' }), {
+      status: 500,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
   } else {
     return response;
   }

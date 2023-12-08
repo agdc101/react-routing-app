@@ -1,7 +1,7 @@
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./views/HomePage";
-import EventDetailPage, { loader as eventDetailLoader } from "./views/EventDetailPage";
+import EventDetailPage, { loader as eventDetailLoader, action as deleteEventAction } from "./views/EventDetailPage";
 import NewEventPage, { action as newEventAction } from "./views/NewEventPage";
 import EditEventPage from "./views/EditEventPage";
 import Root from "./views/Root";
@@ -30,7 +30,8 @@ const BrowserRouter = createBrowserRouter([{
             children: [
               { 
                 index: true, 
-                element: <EventDetailPage/>              
+                element: <EventDetailPage/>,
+                action: deleteEventAction              
               },
               { 
                 path: "edit", 

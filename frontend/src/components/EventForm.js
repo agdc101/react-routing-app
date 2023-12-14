@@ -1,5 +1,11 @@
-import { useNavigate, useNavigation, useActionData } from 'react-router-dom';
-import { Form } from 'react-router-dom';
+import { 
+  Form, 
+  useNavigate, 
+  useNavigation,
+  useActionData, 
+  redirect, 
+  json 
+} from 'react-router-dom';
 
 import classes from './EventForm.module.css';
 
@@ -15,7 +21,7 @@ function EventForm({ method, event }) {
   }
 
   return (
-    <Form method='post' className={classes.form}>
+    <Form method={method} className={classes.form}>
       {data && data.errors && (
           <ul>
               {data.errors.map((error, index) => (
@@ -52,3 +58,40 @@ function EventForm({ method, event }) {
 }
 
 export default EventForm;
+
+export async function action({request, params}) {
+  const method = request.method;
+  const formData = await request.formData();
+
+  const event = {
+    title: formData.get('title'),
+    image : formData.get('image'),
+    description: formData.get('description'),
+    start: formData.get('date'),
+  };
+
+  let url = 'http://localhost:8080/events';
+
+  if (method === 'PATCH') {
+    url += `/${params.eventId}`;
+  }
+
+
+  const response = await fetch(url, {
+    method: method,
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(event)
+  });
+
+  if (response.status === 422) {
+    return response;
+  }
+
+  if (!response.ok) {
+    throw json({ message: "Something went wrong in event details!" }, { status: 500 });
+  }
+
+  return redirect('/events');
+}
